@@ -1,64 +1,121 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+ # Laravel Microservice
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Requirements
+- PHP
+- MySQL
+- Composer
+- JWT Secret
 
-## About Laravel
+## Installation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. Clone the repository.
+2. Run `composer install`.
+3. Configure `.env`:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=your_database_name
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   JWT_SECRET=your_generated_jwt_secret
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Usage
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Register and login using `/api/register` and `/api/login`.
+- Use the provided JWT token in the `Authorization` header (`Bearer <token>`) for accessing `/api/products` CRUD endpoints.
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## API Usage
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+This section covers the basic API calls for registering a user, logging in to obtain a JWT token, and creating a product using that token for authentication.
 
-## Laravel Sponsors
+### 1. Register a New User
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Use this endpoint to register a new user account.
 
-### Premium Partners
+- **Endpoint**: `POST /api/register`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+**Example Request**:
 
-## Contributing
+```bash
+curl --location 'http://localhost/micro/public/api/register' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "password_confirmation": "password123"
+}'
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Expected response:
+{
+    "user": {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "created_at": "2024-11-04T12:34:56.000000Z",
+        "updated_at": "2024-11-04T12:34:56.000000Z"
+    },
+    "token": "your_jwt_token_here"
+}
 
-## Code of Conduct
+```
+## Log In to Get JWT Token
+Log in with your registered email and password to receive a JWT token for authenticating further requests.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Endpoint: POST /api/login
+### Example Request:
+```
+curl --location 'http://localhost/micro/public/api/login' \
+--header 'Content-Type: application/json' \
+--data '{
+    "email": "john@example.com",
+    "password": "password123"
+}'
 
-## Security Vulnerabilities
+Response:
+{
+    "token": "your_jwt_token_here"
+}
+```
+## Create a Product (Authenticated Request)
+```
+curl --location 'http://localhost/micro/public/api/products' \
+--header 'Authorization: Bearer your_jwt_token_here' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--data '{
+    "name": "Sample Product",
+    "description": "This is a sample product description.",
+    "price": 99.99,
+    "quantity": 10
+}'
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 4. Update a Product (Authenticated Request)
 
-## License
+Use this endpoint to update an existing product. This request requires the `Authorization` header to be set with the `Bearer` token.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Endpoint**: `PUT /api/products/{id}`
+
+**Example Request**:
+
+```bash
+curl --location --request PUT 'http://localhost/micro/public/api/products/1' \
+--header 'Authorization: Bearer your_jwt_token_here' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--data '{
+    "name": "Updated Product",
+    "description": "This is an updated product description.",
+    "price": 89.99,
+    "quantity": 20
+}'
+```
+## Delete a Product 
+```
+curl --location --request DELETE 'http://localhost/micro/public/api/products/1' \
+--header 'Authorization: Bearer your_jwt_token_here' \
+--header 'Accept: application/json'
+```
