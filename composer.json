@@ -11,7 +11,10 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "tymon/jwt-auth": "^1.0"
+        "laudis/neo4j-php-client": "^2.8",
+        "rebing/graphql-laravel": "^8.6",
+        "tymon/jwt-auth": "^1.0",
+        "vinelab/neoeloquent": "^1.8"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -56,7 +59,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

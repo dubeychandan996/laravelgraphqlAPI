@@ -77,7 +77,14 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
+        'neo4j' => [
+            'driver' => 'neo4j',
+            'host' => env('DB_NEO4J_HOST', 'localhost'),
+            'port' => env('DB_NEO4J_PORT', 7687),
+            'username' => env('DB_NEO4J_USERNAME', 'neo4j'),
+            'password' => env('DB_NEO4J_PASSWORD', 'h6u4%krd'),
+            'database' => env('DB_NEO4J_DATABASE', ''), // Add this line
+        ],
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),

@@ -2,17 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Vinelab\NeoEloquent\Eloquent\Model as NeoEloquent;
 
-class Product extends Model
+class Product extends NeoEloquent
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'quantity',
-    ];
+    protected $label = 'Product'; 
+    protected $fillable = ['name', 'description', 'price', 'quantity'];
 }
